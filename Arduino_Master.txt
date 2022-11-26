@@ -1,0 +1,2487 @@
+%inicializamos comunicaciones con arduino
+
+pkg load arduino;
+a=arduino;
+
+%Conseguimos todo lo puesto por el transmisor
+d1s=get(CodeH.CI1,'String');
+d2s=get(CodeH.CI2,'String');
+d3s=get(CodeH.CI3,'String');
+d4s=get(CodeH.CI4,'String');
+d5s=get(CodeH.CI5,'String');
+d6s=get(CodeH.CI6,'String');
+d7s=get(CodeH.CI7,'String');
+
+%Si no hay valores en la parte de insertar codigo, se rellena con 0s
+%Solamente desde el primer "1" hacia la izquierda
+
+%bit 1 es el primer "1"
+if(strcmp("1",d1s))
+if(strcmp(" ",d2s)==1) | (strcmp(" ",d3s)==1) | (strcmp(" ",d4s)==1) | (strcmp(" ",d5s)==1) | (strcmp(" ",d6s)==1) | (strcmp(" ",d7s)==1)
+%Convertimos los valores "" a numeros para evaluar
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+
+%d7s?
+if(strcmp(" ",d7s))
+d7s = "0";
+end
+
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+else 
+set(CodeH.aviso,'String',"Se deben colocar bits a la derecha del primer bit 1");
+end
+else
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+
+%d7s?
+if(strcmp(" ",d7s))
+d7s = "0";
+end
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%Seteamos parte del codigo hamming con los datos fijos
+set(CodeH.CH3,'String',d1s);
+set(CodeH.CH5,'String',d2s);
+set(CodeH.CH6,'String',d3s);
+set(CodeH.CH7,'String',d4s);
+set(CodeH.CH9,'String',d5s);
+set(CodeH.CH10,'String',d6s);
+set(CodeH.CH11,'String',d7s);
+
+%operamos para conseguir el resto
+%para p1
+if(d7 == d5)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p1 = n;
+%para p2
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p2 = n;
+
+%para p3
+
+if(d4 == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+p3 = n;
+%para p4  
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d5)
+n=0;
+else
+n=1;
+end
+
+p4 = n; 
+
+%Convertir bits de paridad a string
+p1s = num2str(p1);
+p2s = num2str(p2);
+p3s = num2str(p3);
+p4s = num2str(p4);
+
+%Seteamos el resto del codigo hamming
+set(CodeH.CH1,'String',p1s);
+set(CodeH.CH2,'String',p2s);
+set(CodeH.CH4,'String',p3s);
+set(CodeH.CH8,'String',p4s);
+
+%Pasamos los datos obtenidos al Arduino 
+%asignamos todas las variables del codigo hamming a unas mas intuitivas
+h1=p1;
+h2=p2;
+h3=d1;
+h4=p3;
+h5=d2;
+h6=d3;
+h7=d4;
+h8=p4;
+h9=d5;
+h10=d6;
+h11=d7;
+%seteamos todos los led a 0
+writeDigitalPin(a,"d31",0);
+writeDigitalPin(a,"d33",0);
+writeDigitalPin(a,"d35",0);
+writeDigitalPin(a,"d37",0);
+writeDigitalPin(a,"d39",0);
+writeDigitalPin(a,"d41",0);
+writeDigitalPin(a,"d43",0);
+writeDigitalPin(a,"d45",0);
+writeDigitalPin(a,"d47",0);
+writeDigitalPin(a,"d49",0);
+writeDigitalPin(a,"d51",0);
+%seteamos los led correspondientes segun los resultados
+
+%led 1
+if(h1 == 1)
+writeDigitalPin(a,"d31",1);
+end
+
+%led 2
+if(h2 == 1)
+writeDigitalPin(a,"d33",1);
+end
+
+%led 3
+if(h3 == 1)
+writeDigitalPin(a,"d35",1);
+end
+
+%led 4
+if(h4 == 1)
+writeDigitalPin(a,"d37",1);
+end
+
+%led 5
+if(h5 == 1)
+writeDigitalPin(a,"d39",1);
+end
+
+%led 6
+if(h6 == 1)
+writeDigitalPin(a,"d41",1);
+end
+
+%led 7
+if(h7 == 1)
+writeDigitalPin(a,"d43",1);
+end
+
+%led 8
+if(h8 == 1)
+writeDigitalPin(a,"d45",1);
+end
+
+%led 9
+if(h9 == 1)
+writeDigitalPin(a,"d47",1);
+end
+
+%led 10
+if(h10 == 1)
+writeDigitalPin(a,"d49",1);
+end
+
+%led 11
+if(h11 == 1)
+writeDigitalPin(a,"d51",1);
+end 
+
+%informe de estado 
+set(CodeH.aviso,'String',"Se hizo exitosamente el codigo hamming");
+
+%en caso no se cumpla con el filtro del inicio (si solo se han ingresado 1s o 0s como numeros
+else
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+end
+end
+
+%bit 2 es el primer "1"
+elseif(strcmp("1",d2s))
+if(strcmp(" ",d3s)) | (strcmp(" ",d4s)) | (strcmp(" ",d5s)) | (strcmp(" ",d6s)) | (strcmp(" ",d7s))
+%Convertimos los valores " " a numeros para evaluar
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+
+%d7s?
+if(strcmp(" ",d7s))
+d7s = "0";
+end
+
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+else
+set(CodeH.aviso,'String',"Se deben colocar bits a la derecha del primer bit 1");
+end
+else
+%completar los 0 a la izquierda
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+
+%d7s?
+if(strcmp(" ",d7s))
+d7s = "0";
+end
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%Seteamos parte del codigo hamming con los datos fijos
+set(CodeH.CH3,'String',d1s);
+set(CodeH.CH5,'String',d2s);
+set(CodeH.CH6,'String',d3s);
+set(CodeH.CH7,'String',d4s);
+set(CodeH.CH9,'String',d5s);
+set(CodeH.CH10,'String',d6s);
+set(CodeH.CH11,'String',d7s);
+
+%operamos para conseguir el resto
+%para p1
+if(d7 == d5)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p1 = n;
+%para p2
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p2 = n;
+
+%para p3
+
+if(d4 == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+p3 = n;
+%para p4  
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d5)
+n=0;
+else
+n=1;
+end
+
+p4 = n; 
+
+%Convertir bits de paridad a string
+p1s = num2str(p1);
+p2s = num2str(p2);
+p3s = num2str(p3);
+p4s = num2str(p4);
+
+%Seteamos el resto del codigo hamming
+set(CodeH.CH1,'String',p1s);
+set(CodeH.CH2,'String',p2s);
+set(CodeH.CH4,'String',p3s);
+set(CodeH.CH8,'String',p4s);
+
+%Pasamos los datos obtenidos al Arduino 
+%asignamos todas las variables del codigo hamming a unas mas intuitivas
+h1=p1;
+h2=p2;
+h3=d1;
+h4=p3;
+h5=d2;
+h6=d3;
+h7=d4;
+h8=p4;
+h9=d5;
+h10=d6;
+h11=d7;
+%seteamos todos los led a 0
+writeDigitalPin(a,"d31",0);
+writeDigitalPin(a,"d33",0);
+writeDigitalPin(a,"d35",0);
+writeDigitalPin(a,"d37",0);
+writeDigitalPin(a,"d39",0);
+writeDigitalPin(a,"d41",0);
+writeDigitalPin(a,"d43",0);
+writeDigitalPin(a,"d45",0);
+writeDigitalPin(a,"d47",0);
+writeDigitalPin(a,"d49",0);
+writeDigitalPin(a,"d51",0);
+%seteamos los led correspondientes segun los resultados
+
+%led 1
+if(h1 == 1)
+writeDigitalPin(a,"d31",1);
+end
+
+%led 2
+if(h2 == 1)
+writeDigitalPin(a,"d33",1);
+end
+
+%led 3
+if(h3 == 1)
+writeDigitalPin(a,"d35",1);
+end
+
+%led 4
+if(h4 == 1)
+writeDigitalPin(a,"d37",1);
+end
+
+%led 5
+if(h5 == 1)
+writeDigitalPin(a,"d39",1);
+end
+
+%led 6
+if(h6 == 1)
+writeDigitalPin(a,"d41",1);
+end
+
+%led 7
+if(h7 == 1)
+writeDigitalPin(a,"d43",1);
+end
+
+%led 8
+if(h8 == 1)
+writeDigitalPin(a,"d45",1);
+end
+
+%led 9
+if(h9 == 1)
+writeDigitalPin(a,"d47",1);
+end
+
+%led 10
+if(h10 == 1)
+writeDigitalPin(a,"d49",1);
+end
+
+%led 11
+if(h11 == 1)
+writeDigitalPin(a,"d51",1);
+end 
+
+%informe de estado 
+set(CodeH.aviso,'String',"Se hizo exitosamente el codigo hamming");
+
+%en caso no se cumpla con el filtro del inicio (si solo se han ingresado 1s o 0s como numeros
+else
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+end
+end
+
+%bit 3 es el primer "1"
+elseif(strcmp("1",d3s))
+if(strcmp(" ",d4s)) | (strcmp(" ",d5s)) | (strcmp(" ",d6s)) | (strcmp(" ",d7s))
+%Convertimos los valores "" a numeros para evaluar
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+
+%d7s?
+if(strcmp(" ",d7s))
+d7s = "0";
+end
+
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+else 
+set(CodeH.aviso,'String',"Se deben colocar bits a la derecha del primer bit 1");
+end
+else
+%completar los 0 a la izquierda
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+
+%d7s?
+if(strcmp(" ",d7s))
+d7s = "0";
+end
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%Seteamos parte del codigo hamming con los datos fijos
+set(CodeH.CH3,'String',d1s);
+set(CodeH.CH5,'String',d2s);
+set(CodeH.CH6,'String',d3s);
+set(CodeH.CH7,'String',d4s);
+set(CodeH.CH9,'String',d5s);
+set(CodeH.CH10,'String',d6s);
+set(CodeH.CH11,'String',d7s);
+
+%operamos para conseguir el resto
+%para p1
+if(d7 == d5)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p1 = n;
+%para p2
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p2 = n;
+
+%para p3
+
+if(d4 == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+p3 = n;
+%para p4  
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d5)
+n=0;
+else
+n=1;
+end
+
+p4 = n; 
+
+%Convertir bits de paridad a string
+p1s = num2str(p1);
+p2s = num2str(p2);
+p3s = num2str(p3);
+p4s = num2str(p4);
+
+%Seteamos el resto del codigo hamming
+set(CodeH.CH1,'String',p1s);
+set(CodeH.CH2,'String',p2s);
+set(CodeH.CH4,'String',p3s);
+set(CodeH.CH8,'String',p4s);
+
+%Pasamos los datos obtenidos al Arduino 
+%asignamos todas las variables del codigo hamming a unas mas intuitivas
+h1=p1;
+h2=p2;
+h3=d1;
+h4=p3;
+h5=d2;
+h6=d3;
+h7=d4;
+h8=p4;
+h9=d5;
+h10=d6;
+h11=d7;
+%seteamos todos los led a 0
+writeDigitalPin(a,"d31",0);
+writeDigitalPin(a,"d33",0);
+writeDigitalPin(a,"d35",0);
+writeDigitalPin(a,"d37",0);
+writeDigitalPin(a,"d39",0);
+writeDigitalPin(a,"d41",0);
+writeDigitalPin(a,"d43",0);
+writeDigitalPin(a,"d45",0);
+writeDigitalPin(a,"d47",0);
+writeDigitalPin(a,"d49",0);
+writeDigitalPin(a,"d51",0);
+%seteamos los led correspondientes segun los resultados
+
+%led 1
+if(h1 == 1)
+writeDigitalPin(a,"d31",1);
+end
+
+%led 2
+if(h2 == 1)
+writeDigitalPin(a,"d33",1);
+end
+
+%led 3
+if(h3 == 1)
+writeDigitalPin(a,"d35",1);
+end
+
+%led 4
+if(h4 == 1)
+writeDigitalPin(a,"d37",1);
+end
+
+%led 5
+if(h5 == 1)
+writeDigitalPin(a,"d39",1);
+end
+
+%led 6
+if(h6 == 1)
+writeDigitalPin(a,"d41",1);
+end
+
+%led 7
+if(h7 == 1)
+writeDigitalPin(a,"d43",1);
+end
+
+%led 8
+if(h8 == 1)
+writeDigitalPin(a,"d45",1);
+end
+
+%led 9
+if(h9 == 1)
+writeDigitalPin(a,"d47",1);
+end
+
+%led 10
+if(h10 == 1)
+writeDigitalPin(a,"d49",1);
+end
+
+%led 11
+if(h11 == 1)
+writeDigitalPin(a,"d51",1);
+end 
+
+%informe de estado 
+set(CodeH.aviso,'String',"Se hizo exitosamente el codigo hamming");
+
+%en caso no se cumpla con el filtro del inicio (si solo se han ingresado 1s o 0s como numeros
+else
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+end
+end
+
+%bit 4 es el primer "1"
+elseif(strcmp("1",d4s))
+if(strcmp(" ",d5s)) | (strcmp(" ",d6s)) | (strcmp(" ",d7s))
+%Convertimos los valores "" a numeros para evaluar
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+else 
+set(CodeH.aviso,'String',"Se deben colocar bits a la derecha del primer bit 1");
+end
+else
+%completar los 0 a la izquierda
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+
+%d7s?
+if(strcmp(" ",d7s))
+d7s = "0";
+end
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%Seteamos parte del codigo hamming con los datos fijos
+set(CodeH.CH3,'String',d1s);
+set(CodeH.CH5,'String',d2s);
+set(CodeH.CH6,'String',d3s);
+set(CodeH.CH7,'String',d4s);
+set(CodeH.CH9,'String',d5s);
+set(CodeH.CH10,'String',d6s);
+set(CodeH.CH11,'String',d7s);
+
+%operamos para conseguir el resto
+%para p1
+if(d7 == d5)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p1 = n;
+%para p2
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p2 = n;
+
+%para p3
+
+if(d4 == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+p3 = n;
+%para p4  
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d5)
+n=0;
+else
+n=1;
+end
+
+p4 = n; 
+
+%Convertir bits de paridad a string
+p1s = num2str(p1);
+p2s = num2str(p2);
+p3s = num2str(p3);
+p4s = num2str(p4);
+
+%Seteamos el resto del codigo hamming
+set(CodeH.CH1,'String',p1s);
+set(CodeH.CH2,'String',p2s);
+set(CodeH.CH4,'String',p3s);
+set(CodeH.CH8,'String',p4s);
+
+%Pasamos los datos obtenidos al Arduino 
+%asignamos todas las variables del codigo hamming a unas mas intuitivas
+h1=p1;
+h2=p2;
+h3=d1;
+h4=p3;
+h5=d2;
+h6=d3;
+h7=d4;
+h8=p4;
+h9=d5;
+h10=d6;
+h11=d7;
+%seteamos todos los led a 0
+writeDigitalPin(a,"d31",0);
+writeDigitalPin(a,"d33",0);
+writeDigitalPin(a,"d35",0);
+writeDigitalPin(a,"d37",0);
+writeDigitalPin(a,"d39",0);
+writeDigitalPin(a,"d41",0);
+writeDigitalPin(a,"d43",0);
+writeDigitalPin(a,"d45",0);
+writeDigitalPin(a,"d47",0);
+writeDigitalPin(a,"d49",0);
+writeDigitalPin(a,"d51",0);
+%seteamos los led correspondientes segun los resultados
+
+%led 1
+if(h1 == 1)
+writeDigitalPin(a,"d31",1);
+end
+
+%led 2
+if(h2 == 1)
+writeDigitalPin(a,"d33",1);
+end
+
+%led 3
+if(h3 == 1)
+writeDigitalPin(a,"d35",1);
+end
+
+%led 4
+if(h4 == 1)
+writeDigitalPin(a,"d37",1);
+end
+
+%led 5
+if(h5 == 1)
+writeDigitalPin(a,"d39",1);
+end
+
+%led 6
+if(h6 == 1)
+writeDigitalPin(a,"d41",1);
+end
+
+%led 7
+if(h7 == 1)
+writeDigitalPin(a,"d43",1);
+end
+
+%led 8
+if(h8 == 1)
+writeDigitalPin(a,"d45",1);
+end
+
+%led 9
+if(h9 == 1)
+writeDigitalPin(a,"d47",1);
+end
+
+%led 10
+if(h10 == 1)
+writeDigitalPin(a,"d49",1);
+end
+
+%led 11
+if(h11 == 1)
+writeDigitalPin(a,"d51",1);
+end 
+
+%informe de estado 
+set(CodeH.aviso,'String',"Se hizo exitosamente el codigo hamming");
+
+%en caso no se cumpla con el filtro del inicio (si solo se han ingresado 1s o 0s como numeros
+else
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+end
+end
+
+%bit 5 es el primer "1"
+elseif(strcmp("1",d5s))
+if(strcmp(" ",d6s)) | (strcmp(" ",d7s))
+%Convertimos los valores "" a numeros para evaluar
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+else 
+set(CodeH.aviso,'String',"Se deben colocar bits a la derecha del primer bit 1");
+end
+else
+%completar los 0 a la izquierda
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+
+%d7s?
+if(strcmp(" ",d7s))
+d7s = "0";
+end
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%Seteamos parte del codigo hamming con los datos fijos
+set(CodeH.CH3,'String',d1s);
+set(CodeH.CH5,'String',d2s);
+set(CodeH.CH6,'String',d3s);
+set(CodeH.CH7,'String',d4s);
+set(CodeH.CH9,'String',d5s);
+set(CodeH.CH10,'String',d6s);
+set(CodeH.CH11,'String',d7s);
+
+%operamos para conseguir el resto
+%para p1
+if(d7 == d5)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p1 = n;
+%para p2
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p2 = n;
+
+%para p3
+
+if(d4 == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+p3 = n;
+%para p4  
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d5)
+n=0;
+else
+n=1;
+end
+
+p4 = n; 
+
+%Convertir bits de paridad a string
+p1s = num2str(p1);
+p2s = num2str(p2);
+p3s = num2str(p3);
+p4s = num2str(p4);
+
+%Seteamos el resto del codigo hamming
+set(CodeH.CH1,'String',p1s);
+set(CodeH.CH2,'String',p2s);
+set(CodeH.CH4,'String',p3s);
+set(CodeH.CH8,'String',p4s);
+
+%Pasamos los datos obtenidos al Arduino 
+%asignamos todas las variables del codigo hamming a unas mas intuitivas
+h1=p1;
+h2=p2;
+h3=d1;
+h4=p3;
+h5=d2;
+h6=d3;
+h7=d4;
+h8=p4;
+h9=d5;
+h10=d6;
+h11=d7;
+%seteamos todos los led a 0
+writeDigitalPin(a,"d31",0);
+writeDigitalPin(a,"d33",0);
+writeDigitalPin(a,"d35",0);
+writeDigitalPin(a,"d37",0);
+writeDigitalPin(a,"d39",0);
+writeDigitalPin(a,"d41",0);
+writeDigitalPin(a,"d43",0);
+writeDigitalPin(a,"d45",0);
+writeDigitalPin(a,"d47",0);
+writeDigitalPin(a,"d49",0);
+writeDigitalPin(a,"d51",0);
+%seteamos los led correspondientes segun los resultados
+
+%led 1
+if(h1 == 1)
+writeDigitalPin(a,"d31",1);
+end
+
+%led 2
+if(h2 == 1)
+writeDigitalPin(a,"d33",1);
+end
+
+%led 3
+if(h3 == 1)
+writeDigitalPin(a,"d35",1);
+end
+
+%led 4
+if(h4 == 1)
+writeDigitalPin(a,"d37",1);
+end
+
+%led 5
+if(h5 == 1)
+writeDigitalPin(a,"d39",1);
+end
+
+%led 6
+if(h6 == 1)
+writeDigitalPin(a,"d41",1);
+end
+
+%led 7
+if(h7 == 1)
+writeDigitalPin(a,"d43",1);
+end
+
+%led 8
+if(h8 == 1)
+writeDigitalPin(a,"d45",1);
+end
+
+%led 9
+if(h9 == 1)
+writeDigitalPin(a,"d47",1);
+end
+
+%led 10
+if(h10 == 1)
+writeDigitalPin(a,"d49",1);
+end
+
+%led 11
+if(h11 == 1)
+writeDigitalPin(a,"d51",1);
+end 
+
+%informe de estado 
+set(CodeH.aviso,'String',"Se hizo exitosamente el codigo hamming");
+
+%en caso no se cumpla con el filtro del inicio (si solo se han ingresado 1s o 0s como numeros
+else
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+end
+end
+
+%bit 6 es el primer "1"
+elseif(strcmp("1",d6s))
+if(strcmp(" ",d7s))
+%Convertimos los valores " " a numeros para evaluar
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+
+%d7s?
+if(strcmp(" ",d7s))
+d7s = "0";
+end
+
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+else 
+set(CodeH.aviso,'String',"Se deben colocar bits a la derecha del primer bit 1");
+end
+else
+%completar los 0 a la izquierda
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+
+%d7s?
+if(strcmp(" ",d7s))
+d7s = "0";
+end
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%Seteamos parte del codigo hamming con los datos fijos
+set(CodeH.CH3,'String',d1s);
+set(CodeH.CH5,'String',d2s);
+set(CodeH.CH6,'String',d3s);
+set(CodeH.CH7,'String',d4s);
+set(CodeH.CH9,'String',d5s);
+set(CodeH.CH10,'String',d6s);
+set(CodeH.CH11,'String',d7s);
+
+%operamos para conseguir el resto
+%para p1
+if(d7 == d5)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p1 = n;
+%para p2
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p2 = n;
+
+%para p3
+
+if(d4 == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+p3 = n;
+%para p4  
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d5)
+n=0;
+else
+n=1;
+end
+
+p4 = n; 
+
+%Convertir bits de paridad a string
+p1s = num2str(p1);
+p2s = num2str(p2);
+p3s = num2str(p3);
+p4s = num2str(p4);
+
+%Seteamos el resto del codigo hamming
+set(CodeH.CH1,'String',p1s);
+set(CodeH.CH2,'String',p2s);
+set(CodeH.CH4,'String',p3s);
+set(CodeH.CH8,'String',p4s);
+
+%Pasamos los datos obtenidos al Arduino 
+%asignamos todas las variables del codigo hamming a unas mas intuitivas
+h1=p1;
+h2=p2;
+h3=d1;
+h4=p3;
+h5=d2;
+h6=d3;
+h7=d4;
+h8=p4;
+h9=d5;
+h10=d6;
+h11=d7;
+%seteamos todos los led a 0
+writeDigitalPin(a,"d31",0);
+writeDigitalPin(a,"d33",0);
+writeDigitalPin(a,"d35",0);
+writeDigitalPin(a,"d37",0);
+writeDigitalPin(a,"d39",0);
+writeDigitalPin(a,"d41",0);
+writeDigitalPin(a,"d43",0);
+writeDigitalPin(a,"d45",0);
+writeDigitalPin(a,"d47",0);
+writeDigitalPin(a,"d49",0);
+writeDigitalPin(a,"d51",0);
+%seteamos los led correspondientes segun los resultados
+
+%led 1
+if(h1 == 1)
+writeDigitalPin(a,"d31",1);
+end
+
+%led 2
+if(h2 == 1)
+writeDigitalPin(a,"d33",1);
+end
+
+%led 3
+if(h3 == 1)
+writeDigitalPin(a,"d35",1);
+end
+
+%led 4
+if(h4 == 1)
+writeDigitalPin(a,"d37",1);
+end
+
+%led 5
+if(h5 == 1)
+writeDigitalPin(a,"d39",1);
+end
+
+%led 6
+if(h6 == 1)
+writeDigitalPin(a,"d41",1);
+end
+
+%led 7
+if(h7 == 1)
+writeDigitalPin(a,"d43",1);
+end
+
+%led 8
+if(h8 == 1)
+writeDigitalPin(a,"d45",1);
+end
+
+%led 9
+if(h9 == 1)
+writeDigitalPin(a,"d47",1);
+end
+
+%led 10
+if(h10 == 1)
+writeDigitalPin(a,"d49",1);
+end
+
+%led 11
+if(h11 == 1)
+writeDigitalPin(a,"d51",1);
+end 
+
+%informe de estado 
+set(CodeH.aviso,'String',"Se hizo exitosamente el codigo hamming");
+
+%en caso no se cumpla con el filtro del inicio (si solo se han ingresado 1s o 0s como numeros
+else
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+end
+end
+
+%bit 7 es el primer "1"
+else
+%d1s?
+if(strcmp(" ",d1s))
+d1s = "0";
+end
+
+%d2s?
+if(strcmp(" ",d2s))
+d2s = "0";
+end
+
+%d3s?
+if(strcmp(" ",d3s))
+d3s = "0";
+end
+
+%d4s?
+if(strcmp(" ",d4s))
+d4s = "0";
+end
+
+%d5s?
+if(strcmp(" ",d5s))
+d5s = "0";
+end
+
+%d6s?
+if(strcmp(" ",d6s))
+d6s = "0";
+end
+
+%d7s?
+if(strcmp(" ",d7s))
+d7s = "0";
+end
+
+%convertimos valores string a num
+d1=str2num(d1s);
+d2=str2num(d2s);
+d3=str2num(d3s);
+d4=str2num(d4s);
+d5=str2num(d5s);
+d6=str2num(d6s);
+d7=str2num(d7s);
+%condicion que filtra numeros diferentes a 1 o 0
+if ((d1==0) | (d1==1)) & ((d2==0) | (d2==1)) & ((d3==0) | (d3==1)) & ((d4==0) | (d4==1)) & ((d5==0) | (d5==1)) & ((d6==0) | (d6==1)) & ((d7==0) | (d7==1))
+%Seteamos parte del codigo hamming con los datos fijos
+set(CodeH.CH3,'String',d1s);
+set(CodeH.CH5,'String',d2s);
+set(CodeH.CH6,'String',d3s);
+set(CodeH.CH7,'String',d4s);
+set(CodeH.CH9,'String',d5s);
+set(CodeH.CH10,'String',d6s);
+set(CodeH.CH11,'String',d7s);
+
+%operamos para conseguir el resto
+%para p1
+if(d7 == d5)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p1 = n;
+%para p2
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+p2 = n;
+
+%para p3
+
+if(d4 == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+p3 = n;
+%para p4  
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d5)
+n=0;
+else
+n=1;
+end
+
+p4 = n; 
+
+%Convertir bits de paridad a string
+p1s = num2str(p1);
+p2s = num2str(p2);
+p3s = num2str(p3);
+p4s = num2str(p4);
+
+%Seteamos el resto del codigo hamming
+set(CodeH.CH1,'String',p1s);
+set(CodeH.CH2,'String',p2s);
+set(CodeH.CH4,'String',p3s);
+set(CodeH.CH8,'String',p4s);
+
+%Pasamos los datos obtenidos al Arduino 
+%asignamos todas las variables del codigo hamming a unas mas intuitivas
+h1=p1;
+h2=p2;
+h3=d1;
+h4=p3;
+h5=d2;
+h6=d3;
+h7=d4;
+h8=p4;
+h9=d5;
+h10=d6;
+h11=d7;
+%seteamos todos los led a 0
+writeDigitalPin(a,"d31",0);
+writeDigitalPin(a,"d33",0);
+writeDigitalPin(a,"d35",0);
+writeDigitalPin(a,"d37",0);
+writeDigitalPin(a,"d39",0);
+writeDigitalPin(a,"d41",0);
+writeDigitalPin(a,"d43",0);
+writeDigitalPin(a,"d45",0);
+writeDigitalPin(a,"d47",0);
+writeDigitalPin(a,"d49",0);
+writeDigitalPin(a,"d51",0);
+%seteamos los led correspondientes segun los resultados
+
+%led 1
+if(h1 == 1)
+writeDigitalPin(a,"d31",1);
+end
+
+%led 2
+if(h2 == 1)
+writeDigitalPin(a,"d33",1);
+end
+
+%led 3
+if(h3 == 1)
+writeDigitalPin(a,"d35",1);
+end
+
+%led 4
+if(h4 == 1)
+writeDigitalPin(a,"d37",1);
+end
+
+%led 5
+if(h5 == 1)
+writeDigitalPin(a,"d39",1);
+end
+
+%led 6
+if(h6 == 1)
+writeDigitalPin(a,"d41",1);
+end
+
+%led 7
+if(h7 == 1)
+writeDigitalPin(a,"d43",1);
+end
+
+%led 8
+if(h8 == 1)
+writeDigitalPin(a,"d45",1);
+end
+
+%led 9
+if(h9 == 1)
+writeDigitalPin(a,"d47",1);
+end
+
+%led 10
+if(h10 == 1)
+writeDigitalPin(a,"d49",1);
+end
+
+%led 11
+if(h11 == 1)
+writeDigitalPin(a,"d51",1);
+end 
+
+%informe de estado 
+set(CodeH.aviso,'String',"Se hizo exitosamente el codigo hamming");
+
+%en caso no se cumpla con el filtro del inicio (si solo se han ingresado 1s o 0s como numeros
+else
+%saltamos el aviso para darle al usuario el error
+set(CodeH.aviso,'String',"Solo se admiten 1s y 0s");
+%Despejamos los valores de otros campos en caso esten con algun valor que no deberia de salir
+set(CodeH.CH1,'String'," ");
+set(CodeH.CH2,'String'," ");
+set(CodeH.CH3,'String'," ");
+set(CodeH.CH4,'String'," ");
+set(CodeH.CH5,'String'," ");
+set(CodeH.CH6,'String'," ");
+set(CodeH.CH7,'String'," ");
+set(CodeH.CH8,'String'," ");
+set(CodeH.CH9,'String'," ");
+set(CodeH.CH10,'String'," ");
+set(CodeH.CH11,'String'," ");
+%ponemos casilla en blanco en donde esta el caracter diferente de 0 o 1
+if(~((d1==0) | (d1==1)))
+set(CodeH.CI1,'String'," ");
+end
+if(~((d2==0) | (d2==1)))
+set(CodeH.CI2,'String'," ");
+end
+if(~((d3==0) | (d3==1)))
+set(CodeH.CI3,'String'," ");
+end
+if(~((d4==0) | (d4==1)))
+set(CodeH.CI4,'String'," ");
+end
+if(~((d5==0) | (d5==1)))
+set(CodeH.CI5,'String'," ");
+end
+if(~((d6==0) | (d6==1)))
+set(CodeH.CI6,'String'," ");
+end
+if(~((d7==0) | (d7==1)))
+set(CodeH.CI7,'String'," ");
+end
+end
+end
+
+  

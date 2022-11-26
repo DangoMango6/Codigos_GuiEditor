@@ -1,0 +1,397 @@
+%Iniciamos comunicaciones con el arduino
+pkg load arduino;
+b = arduino;
+%leemos datos del arduino
+r1s=readDigitalPin(b,"d31");
+r2s=readDigitalPin(b,"d33");
+r3s=readDigitalPin(b,"d35");
+r4s=readDigitalPin(b,"d37");
+r5s=readDigitalPin(b,"d39");
+r6s=readDigitalPin(b,"d41");
+r7s=readDigitalPin(b,"d43");
+r8s=readDigitalPin(b,"d45");
+r9s=readDigitalPin(b,"d47");
+r10s=readDigitalPin(b,"d49");
+r11s=readDigitalPin(b,"d51");
+%volvemos los resultados de str a num
+r1 = str2num(r1s);
+r2 = str2num(r2s);
+r3 = str2num(r3s);
+r4 = str2num(r4s);
+r5 = str2num(r5s);
+r6 = str2num(r6s);
+r7 = str2num(r7s);
+r8 = str2num(r8s);
+r9 = str2num(r9s);
+r10 = str2num(r10s);
+r11 = str2num(r11s);
+%asignacion a otras variables mas intuitivas los bits de paridad
+p1=r1;
+p2=r2;
+p3=r4;
+p4=r8;
+%asignacion a otras variables mas intuitivas los bits de datos
+d1=r3;
+d2=r5;
+d3=r6;
+d4=r7;
+d5=r9;
+d6=r10;
+d7=r11;
+%hacemos hamming con los datos recibidos
+
+%para bp1
+if(d7 == d5)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+bp1 = n;
+%para bp2
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d4)
+n=0;
+else
+n=1;
+end
+
+if(n == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d1)
+n=0;
+else
+n=1;
+end
+
+bp2 = n;
+
+%para bp3
+
+if(d4 == d3)
+n=0;
+else
+n=1;
+end
+
+if(n == d2)
+n=0;
+else
+n=1;
+end
+
+bp3 = n;
+%para bp4  
+
+if(d7 == d6)
+n=0;
+else
+n=1;
+end
+
+if(n == d5)
+n=0;
+else
+n=1;
+end
+
+bp4 = n;
+%en caso no halla ningun bit de paridad erroneo
+if (p1 == bp1) & (p2 == bp2) & (p3 == bp3) & (p4 == bp3)
+%presentamos el codigo hamming recibido
+Set(codeH2.CR1,'String',r1s);
+Set(codeH2.CR2,'String',r2s);
+Set(codeH2.CR3,'String',r3s);
+Set(codeH2.CR4,'String',r4s);
+Set(codeH2.CR5,'String',r5s);
+Set(codeH2.CR6,'String',r6s);
+Set(codeH2.CR7,'String',r7s);
+Set(codeH2.CR8,'String',r8s);
+Set(codeH2.CR9,'String',r9s);
+Set(codeH2.CR10,'String',r10s);
+Set(codeH2.CR11,'String',r11s);
+%comentamos que no hay ningun bit erroneo
+Set(CodeH2.BE,'String',"No hay ningun bit erroneo");
+%En caso no sea asi se detecta y corrige el bit erroneo
+else
+%variable que ayudara con el calculo
+bitE=0;
+
+%bit de comprobacion 4
+
+if (bp4 ~= p4)
+bitE=bitE+8;
+else
+bitE = bitE;
+end
+
+%bit de comprobacion 3
+
+if (bp3 ~= p3)
+bitE=bitE+4;
+else
+bitE = bitE;
+end
+
+%bit de comprobacion 2
+
+if (bp2 ~= p2)
+bitE=bitE+2;
+else
+bitE = bitE;
+end
+
+%bit de comprobacion 1
+
+if (bp1 ~= p1)
+bitE=bitE+1;
+else
+bitE = bitE;
+end
+%volvemos el bit erroneo a string
+bitEs = num2str(bitE);
+%concatenamos lo que queremos poner en el txtbox "BE"
+betxt = strcat("El bit erroneo es: ", bitEs);
+%comentamos el bit que se ha detectado como erroneo
+Set(CodeH2.BE,'String',betxt);
+
+%corregimos el bit en el resultado:
+%En caso sea erroneo el bit 1
+if (bitE == 1)
+if (r1 == 0)
+Set(CodeH2.CR1,'String',"1");
+else
+Set(CodeH2.CR1,'String',"0");
+end
+Set(codeH2.CR2,'String',r2s);
+Set(codeH2.CR3,'String',r3s);
+Set(codeH2.CR4,'String',r4s);
+Set(codeH2.CR5,'String',r5s);
+Set(codeH2.CR6,'String',r6s);
+Set(codeH2.CR7,'String',r7s);
+Set(codeH2.CR8,'String',r8s);
+Set(codeH2.CR9,'String',r9s);
+Set(codeH2.CR10,'String',r10s);
+Set(codeH2.CR11,'String',r11s);
+end
+
+%En caso sea erroneo el bit 2
+if (bitE == 2)
+if (r1 == 0)
+Set(CodeH2.CR2,'String',"1");
+else
+Set(CodeH2.CR2,'String',"0");
+end
+Set(codeH2.CR1,'String',r1s);
+Set(codeH2.CR3,'String',r3s);
+Set(codeH2.CR4,'String',r4s);
+Set(codeH2.CR5,'String',r5s);
+Set(codeH2.CR6,'String',r6s);
+Set(codeH2.CR7,'String',r7s);
+Set(codeH2.CR8,'String',r8s);
+Set(codeH2.CR9,'String',r9s);
+Set(codeH2.CR10,'String',r10s);
+Set(codeH2.CR11,'String',r11s);
+end
+
+%En caso sea erroneo el bit 3
+if (bitE == 3)
+if (r1 == 0)
+Set(CodeH2.CR3,'String',"1");
+else
+Set(CodeH2.CR3,'String',"0");
+end
+Set(codeH2.CR2,'String',r2s);
+Set(codeH2.CR1,'String',r1s);
+Set(codeH2.CR4,'String',r4s);
+Set(codeH2.CR5,'String',r5s);
+Set(codeH2.CR6,'String',r6s);
+Set(codeH2.CR7,'String',r7s);
+Set(codeH2.CR8,'String',r8s);
+Set(codeH2.CR9,'String',r9s);
+Set(codeH2.CR10,'String',r10s);
+Set(codeH2.CR11,'String',r11s);
+end
+
+%En caso sea erroneo el bit 4
+if (bitE == 4)
+if (r1 == 0)
+Set(CodeH2.CR4,'String',"1");
+else
+Set(CodeH2.CR4,'String',"0");
+end
+Set(codeH2.CR2,'String',r2s);
+Set(codeH2.CR3,'String',r3s);
+Set(codeH2.CR1,'String',r1s);
+Set(codeH2.CR5,'String',r5s);
+Set(codeH2.CR6,'String',r6s);
+Set(codeH2.CR7,'String',r7s);
+Set(codeH2.CR8,'String',r8s);
+Set(codeH2.CR9,'String',r9s);
+Set(codeH2.CR10,'String',r10s);
+Set(codeH2.CR11,'String',r11s);
+end
+
+%En caso sea erroneo el bit 5
+if (bitE == 5)
+if (r1 == 0)
+Set(CodeH2.CR5,'String',"1");
+else
+Set(CodeH2.CR5,'String',"0");
+end
+Set(codeH2.CR2,'String',r2s);
+Set(codeH2.CR3,'String',r3s);
+Set(codeH2.CR4,'String',r4s);
+Set(codeH2.CR1,'String',r1s);
+Set(codeH2.CR6,'String',r6s);
+Set(codeH2.CR7,'String',r7s);
+Set(codeH2.CR8,'String',r8s);
+Set(codeH2.CR9,'String',r9s);
+Set(codeH2.CR10,'String',r10s);
+Set(codeH2.CR11,'String',r11s);
+end
+
+%En caso sea erroneo el bit 6
+if (bitE == 6)
+if (r1 == 0)
+Set(CodeH2.CR6,'String',"1");
+else
+Set(CodeH2.CR6,'String',"0");
+end
+Set(codeH2.CR2,'String',r2s);
+Set(codeH2.CR3,'String',r3s);
+Set(codeH2.CR4,'String',r4s);
+Set(codeH2.CR5,'String',r5s);
+Set(codeH2.CR1,'String',r1s);
+Set(codeH2.CR7,'String',r7s);
+Set(codeH2.CR8,'String',r8s);
+Set(codeH2.CR9,'String',r9s);
+Set(codeH2.CR10,'String',r10s);
+Set(codeH2.CR11,'String',r11s);
+end
+
+%En caso sea erroneo el bit 7
+if (bitE == 7)
+if (r1 == 0)
+Set(CodeH2.CR7,'String',"1");
+else
+Set(CodeH2.CR7,'String',"0");
+end
+Set(codeH2.CR2,'String',r2s);
+Set(codeH2.CR3,'String',r3s);
+Set(codeH2.CR4,'String',r4s);
+Set(codeH2.CR5,'String',r5s);
+Set(codeH2.CR6,'String',r6s);
+Set(codeH2.CR1,'String',r1s);
+Set(codeH2.CR8,'String',r8s);
+Set(codeH2.CR9,'String',r9s);
+Set(codeH2.CR10,'String',r10s);
+Set(codeH2.CR11,'String',r11s);
+end
+
+%En caso sea erroneo el bit 8
+if (bitE == 8)
+if (r1 == 0)
+Set(CodeH2.CR8,'String',"1");
+else
+Set(CodeH2.CR8,'String',"0");
+end
+Set(codeH2.CR2,'String',r2s);
+Set(codeH2.CR3,'String',r3s);
+Set(codeH2.CR4,'String',r4s);
+Set(codeH2.CR5,'String',r5s);
+Set(codeH2.CR6,'String',r6s);
+Set(codeH2.CR7,'String',r7s);
+Set(codeH2.CR1,'String',r1s);
+Set(codeH2.CR9,'String',r9s);
+Set(codeH2.CR10,'String',r10s);
+Set(codeH2.CR11,'String',r11s);
+end
+
+%En caso sea erroneo el bit 9
+if (bitE == 9)
+if (r1 == 0)
+Set(CodeH2.CR9,'String',"1");
+else
+Set(CodeH2.CR9,'String',"0");
+end
+Set(codeH2.CR2,'String',r2s);
+Set(codeH2.CR3,'String',r3s);
+Set(codeH2.CR4,'String',r4s);
+Set(codeH2.CR5,'String',r5s);
+Set(codeH2.CR6,'String',r6s);
+Set(codeH2.CR7,'String',r7s);
+Set(codeH2.CR8,'String',r8s);
+Set(codeH2.CR1,'String',r1s);
+Set(codeH2.CR10,'String',r10s);
+Set(codeH2.CR11,'String',r11s);
+end
+
+%En caso sea erroneo el bit 10
+if (bitE == 10)
+if (r1 == 0)
+Set(CodeH2.CR10,'String',"1");
+else
+Set(CodeH2.CR10,'String',"0");
+end
+Set(codeH2.CR2,'String',r2s);
+Set(codeH2.CR3,'String',r3s);
+Set(codeH2.CR4,'String',r4s);
+Set(codeH2.CR5,'String',r5s);
+Set(codeH2.CR6,'String',r6s);
+Set(codeH2.CR7,'String',r7s);
+Set(codeH2.CR8,'String',r8s);
+Set(codeH2.CR9,'String',r9s);
+Set(codeH2.CR1,'String',r1s);
+Set(codeH2.CR11,'String',r11s);
+end
+
+%En caso sea erroneo el bit 11
+if (bitE == 11)
+if (r1 == 0)
+Set(CodeH2.CR11,'String',"1");
+else
+Set(CodeH2.CR11,'String',"0");
+end
+Set(codeH2.CR2,'String',r2s);
+Set(codeH2.CR3,'String',r3s);
+Set(codeH2.CR4,'String',r4s);
+Set(codeH2.CR5,'String',r5s);
+Set(codeH2.CR6,'String',r6s);
+Set(codeH2.CR7,'String',r7s);
+Set(codeH2.CR8,'String',r8s);
+Set(codeH2.CR9,'String',r9s);
+Set(codeH2.CR10,'String',r10s);
+Set(codeH2.CR1,'String',r1s);
+end
+end
+
+  
